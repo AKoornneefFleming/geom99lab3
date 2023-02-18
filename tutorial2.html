@@ -1,0 +1,112 @@
+<html>
+<head>
+  <meta name="description" content="A Map of Canada">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Educational Map of Canada Akoornne</title>
+  <style>
+    html,
+    
+    body{
+	    background-color: #3f3c37;
+    }
+
+    h1 {
+        color: red;
+        text-align: center;
+    }
+
+    .p1 {
+        color: red;
+        text-align: center;
+    }
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 98%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.25/">
+    
+  </script>
+  
+</head>
+
+ <script>
+
+  require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+
+      "esri/layers/FeatureLayer"
+    ],
+
+    function(esriConfig, Map, MapView, FeatureLayer){
+
+     esriConfig.apiKey = "0StrNyyNEzjNmqPF7XSWUJTg51e-w5mWiAVyEP9ik9GAAQBuxz6a_Q_eZF-twJ5pW5pGEvsWfkaFjp6SNTBX-ucWOB3mo4gC1LVWj3K2pxNOahJuqx9k68WPqAlwkpn6DWZnkVCUgVKVLy97akGkvQ..";
+
+      const AKmap = new Map({
+        basemap: "arcgis-topographic" //Basemap layer service
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: AKmap,
+        center: [-118.80543,34.02700], //Longitude, latitude
+        zoom: 13
+      });
+
+      // Define a pop-up for Trailheads
+      const popupTrailheads = {
+        "title": "Trailhead",
+        "content": "<b>Trail:</b> {TRL_NAME}<br><b>City:</b> {CITY_JUR}<br><b>Cross Street:</b> {X_STREET}<br><b>Parking:</b> {PARKING}<br><b>Elevation:</b> {ELEV_FT} ft"
+      }
+
+    const trailheads = new FeatureLayer({
+        url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads_Styled/FeatureServer/0",
+        outFields: ["TRL_NAME","CITY_JUR","X_STREET","PARKING","ELEV_FT"],
+        popupTemplate: popupTrailheads
+      });
+
+      AKmap.add(trailheads);
+
+      // Define a popup for Trails
+      const popupTrails = {
+        title: "Trail Information",
+        content: [{
+         type: "media",
+          mediaInfos: [{
+            type: "column-chart",
+            caption: "",
+            value: {
+              fields: [ "ELEV_MIN","ELEV_MAX" ],
+              normalizeField: null,
+              tooltipField: "Min and max elevation values"
+              }
+            }]
+        }]
+      }
+
+      const trails = new FeatureLayer({
+        url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails_Styled/FeatureServer/0",
+        outFields: ["TRL_NAME","ELEV_GAIN"],
+        popupTemplate: popupTrails
+      });
+
+      AKmap.add(trails,0);
+
+     
+
+    });
+  </script>
+
+</head>
+<body>
+    <h1>Canada</h1>
+    <p class = "p1">Learn your provinces and territories</p>
+  <div id="viewDiv"></div>
+</body>
+</html>

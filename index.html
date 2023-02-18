@@ -1,13 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta name="description" content="A Map of Canada">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Educational Map of Canada Akoornne</title>
+  <style>
+    html,
+    
+    body{
+	    background-color: #3f3c37;
+    }
+
+    h1 {
+        color: red;
+        text-align: center;
+    }
+
+    .p1 {
+        color: red;
+        text-align: center;
+    }
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 98%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.24/">
+    
+  </script>
+  
+</head>
+
+ <script>
+
+  require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer"
+    ],
+
+    function(esriConfig, Map, MapView, FeatureLayer){
+
+     esriConfig.apiKey = "AAPKa430fba2d1434432b9b367da7f167db2-jXPRVY5czz22AlTa3-V2I7UFLvoQzKj0yxBmhnhdprLbrAg345Cbvffj5RD6D2X";
+
+      const AKmap = new Map({
+        basemap: "arcgis-topographic" //Basemap layer service
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: AKmap,
+        center: [-106.89843642578178,57.963039006933954], //Longitude, latitude
+        zoom: 4
+      });
+      
+
+      // Define a pop-up for Trailheads
+      const popups = {
+        "title": "The Province / Territory Name Game",
+        "content": "<b>English Name:</b> {PRENAME}<br><b>French Name:</b> {PRFNAME}"
+      }
+
+    const provinces_territories = new FeatureLayer({
+        url: "https://utility.arcgis.com/usrsvcs/servers/a16bf9310815418e8bf0ac773b154907/rest/services/geom99fri/akoornneCanada_bonusNoLabels/MapServer/0",
+        popupTemplate: popups
+      });
+
+      AKmap.add(provinces_territories);
+
+          
+
+    });
+  </script>
+
 </head>
 <body>
-    <h1>test</h1>
-    <p1>this is where the website goes</p1>
+    <h1>The Canadian Name Game</h1>
+    <p class = "p1"><b>Learn your provinces and territories - in english and in french!</b></p>
+    <p class = "p1">Think of the name, then click on the province or territory to check your memory!</p>
+  <div id="viewDiv"></div>
 </body>
 </html>
