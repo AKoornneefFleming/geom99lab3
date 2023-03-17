@@ -16,10 +16,18 @@
     <!-- Define a style for the map container -->
     <style>
         /* Set the height and width of the map container */
-        #map {
+        /* #map {
             height: 800px;
             width: 800px
+        } */
+        body {
+            padding: 0;
+            margin: 0;
         }
+        html, body, #map {
+            height: 100%;
+            width: 100vw;
+}
     </style>
     <!-- Load the Leaflet JavaScript file from a CDN -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
